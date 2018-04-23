@@ -1,0 +1,33 @@
+package BTH1_B1;
+
+public class StringCustom {
+	public String doiHoa(String str) {
+		String chuoiHoa ="";
+		char[] sc = str.toCharArray();
+		for (int i=0; i<sc.length;i++) {
+			int ascii = sc[i];
+			
+				if(ascii>=97&&ascii<=122) {
+					ascii-=32;
+					chuoiHoa+=(char) ascii;
+				} else {
+					chuoiHoa+=(char) ascii;
+				}
+			}
+		
+		
+		return chuoiHoa;
+		
+	}
+	
+	public String doiThuong() {
+		String chuoiThuong= "";
+		return chuoiThuong;
+	}
+	public static void main(String []args) {
+		StringCustom custom = new StringCustom();
+		String str = "Toi yeu Que Huong";
+		System.out.println(custom.doiHoa(str));
+	}
+
+}

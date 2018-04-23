@@ -1,0 +1,75 @@
+package UDP_Practice;
+
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.util.StringTokenizer;
+
+public class DoiChuoiServer {
+	public static void main(String []args) throws Exception{
+		DatagramSocket serverSocket = new DatagramSocket(8000);
+		System.out.println("Server is started!");
+		byte[] receiveData= new byte[12222];
+		byte[] sendData = new byte[10000000];
+		
+		while(true) {
+			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+			serverSocket.receive(receivePacket);
+			InetAddress IPAddress = receivePacket.getAddress();
+			int port = receivePacket.getPort();
+			String chuoikytu = new String(receivePacket.getData());
+			System.out.println(chuoikytu);
+			String chuoiHoa = ChuyenHoa(chuoikytu);
+			String chuoiThuong = ChuyenThuong(chuoikytu);
+			int demtu = DemTu(chuoikytu);
+			String demtuStr = String.valueOf(demtu);
+			System.out.println(HoaThuong(chuoikytu));
+			
+			String receive = chuoiThuong+"\n"+chuoiHoa+"\n"+demtuStr;
+			System.out.println(receive);
+			sendData= receive.getBytes();
+			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,IPAddress,port);
+			System.out.println(sendData.length);
+			serverSocket.send(sendPacket);
+						
+			
+		}
+	}
+	public static  String ChuyenHoa(String st) {
+		String chuoiHoa = st.toUpperCase();
+		return chuoiHoa;
+	}
+	
+	public static String ChuyenThuong(String str) {
+		String  chuoiThuong = str.toLowerCase();
+		return chuoiThuong;
+	}
+	
+	public static int DemTu(String str) {
+		StringTokenizer stringTokenizer =  new StringTokenizer(str);
+		int sotu = stringTokenizer.countTokens();
+		return sotu;
+	}
+	public static String HoaThuong(String str) {
+		String ht="";
+		String [] mang = str.split(" ");
+		for (int i = 0; i < mang.length; i++) {
+			System.out.println(mang[i]);
+			char[] sc= mang[i].toCharArray();
+			int ascii= sc[0];
+			if(ascii< 65|| ascii >90) {
+				sc[0]-=32;
+			}
+			String tu = sc.toString();
+			System.out.println(tu);
+			ht+=tu;
+				
+			}
+
+		return ht;
+	}
+	
+
+
+}

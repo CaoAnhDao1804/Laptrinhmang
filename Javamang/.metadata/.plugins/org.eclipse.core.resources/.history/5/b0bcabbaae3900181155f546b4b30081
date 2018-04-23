@@ -1,0 +1,38 @@
+package UDP_Practice;
+
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+public class ChatRoomServer {
+	public static void main(String []args) throws Exception{
+		DatagramSocket serverSocket = new DatagramSocket(8000);
+		System.out.println("Server is started!");
+		byte[] receiveData= new byte[12222];
+		byte[] sendData = new byte[10000000];
+		Scanner scanner = new Scanner(System.in);
+		
+		while(true) {
+			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+			serverSocket.receive(receivePacket);
+			InetAddress IPAddress = receivePacket.getAddress();
+			int port = receivePacket.getPort();
+			String chuoikytu = new String(receivePacket.getData());
+			System.out.println(chuoikytu);
+			
+			System.out.println("Server:");
+			String msg= scanner.nextLine();
+			msg ="Server:"+msg;
+			sendData= msg.getBytes();
+			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,IPAddress,port);
+			serverSocket.send(sendPacket);
+						
+			
+		}
+	}
+	
+
+}

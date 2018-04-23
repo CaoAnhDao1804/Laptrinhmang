@@ -1,0 +1,55 @@
+package UDP_Practice;
+
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.util.StringTokenizer;
+
+public class DoiChuoiServer {
+	public static void main(String []args) throws Exception{
+		DatagramSocket serverSocket = new DatagramSocket(7776);
+		System.out.println("Server is started!");
+		byte[] receiveData= new byte[1024];
+		byte[] sendData = new byte[1024];
+		
+		while(true) {
+			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+			serverSocket.receive(receivePacket);
+			InetAddress IPAddress = receivePacket.getAddress();
+			int port = receivePacket.getPort();
+			String chuoikytu = new String(receivePacket.getData());
+			System.out.println(chuoikytu);
+			String chuoiHoa = ChuyenHoa(chuoikytu);
+			String chuoiThuong = ChuyenThuong(chuoikytu);
+			int demtu = DemTu(chuoikytu);
+			String demtuStr = String.valueOf(demtu);
+			String receive = chuoiHoa + "\n" +chuoiThuong +"\n"+ demtuStr;
+			System.out.println(receive);
+			sendData= receive.getBytes();
+			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,IPAddress,port);
+			serverSocket.send(sendPacket);
+			
+			
+			
+			
+		}
+	}
+	public static  String ChuyenHoa(String st) {
+		String chuoiHoa = st.toUpperCase();
+		return chuoiHoa;
+	}
+	
+	public static String ChuyenThuong(String str) {
+		String  chuoiThuong = str.toLowerCase();
+		return chuoiThuong;
+	}
+	
+	public static int DemTu(String str) {
+		StringTokenizer stringTokenizer =  new StringTokenizer(str);
+		int sotu = stringTokenizer.countTokens();
+		return sotu;
+	}
+
+
+}
